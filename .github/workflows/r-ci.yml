@@ -20,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Set up R using the specified version
+      # Set up R
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
@@ -35,13 +35,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-R-
 
-      # Install dependencies explicitly using remotes::install_cran()
+      # Install dependencies
       - name: Install R dependencies
         run: |
           Rscript -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
-          Rscript -e 'remotes::install_cran(c("caret", "e1071", "tidyverse", "testthat", "shiny" , "kernlab"), repos="https://cloud.r-project.org")'
+          Rscript -e 'remotes::install_cran(c("caret", "e1071", "tidyverse", "testthat", "shiny", "kernlab", "covr"), repos="https://cloud.r-project.org")'
 
       # Run tests
       - name: Run tests
         run: |
           Rscript -e 'testthat::test_dir("tests")'
+
+      # Generate coverage report
+      - name: Code Coverage
+        run: |
+          Rscript -e 'covr::report(covr::package_coverage())'

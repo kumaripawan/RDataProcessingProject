@@ -48,3 +48,9 @@ plot_performance <- function(metrics) {
 # metrics <- evaluate_model(model, processed_data$test)
 # print(metrics)
 # plot_performance(metrics)
+
+
+library(covr)
+coverage <- package_coverage()
+report(coverage)
+
