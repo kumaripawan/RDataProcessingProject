@@ -32,7 +32,7 @@ jobs:
       # Set up and install R environment and required packages
       - name: Install additional R packages
         run: |
-          install.packages(c("testthat", "shiny"), repos="https://cloud.r-project.org")
+          Rscript -e 'install.packages(c("testthat", "shiny"), repos = "https://cloud.r-project.org")'
 
       # Run the tests using testthat
       - name: Run tests
