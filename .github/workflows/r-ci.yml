@@ -15,7 +15,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          install.packages(c("caret", "e1071", "tidyverse", "testthat", "shiny"))
+          Rscript -e 'install.packages(c("caret", "e1071", "tidyverse", "testthat", "shiny"))'
 
       - name: Run tests
         run: |
