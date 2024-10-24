@@ -1,6 +1,6 @@
 # Load the testthat package and the script to be tested
 library(testthat)
-source("R/data_processing.R") # Correct the path to the data_processing.R file
+source("../data_processing.R")  # Corrected the path to point to data_processing.R in the root folder
 
 # Unit Test 1: Testing the preprocess_data function
 test_that("preprocess_data works correctly", {
@@ -62,4 +62,43 @@ test_that("plot_performance works correctly", {
 
   # Ensure the function doesn't throw an error
   expect_error(plot_performance(metrics), NA)
+})
+
+# Unit Test 5: Testing zero variance features
+test_that("Zero variance feature test works correctly", {
+  # Minimal dataset with a zero variance feature
+  data <- data.frame(
+    target = c(1, 0, 1, 0),
+    feature1 = rep(1, 4),  # Zero variance
+    feature2 = c(1, 2, 3, 4)
+  )
+
+  processed_data <- preprocess_data(data)
+
+  # Check if the feature with zero variance is handled correctly (removed or ignored)
+  expect_true(!"feature1" %in% colnames(processed_data$train))  # Example: feature1 should be removed
+
+  # Train a simple model and check if it runs without errors
+  model <- train_model(processed_data$train, "linear_regression")
+  expect_s3_class(model, "train")
+})
+
+# Unit Test 6: Testing unbalanced classes
+test_that("Unbalanced class test works correctly", {
+  # Simplified unbalanced data set
+  data <- data.frame(
+    target = c(rep(1, 90), rep(0, 10)),  # 90% class 1, 10% class 0
+    feature1 = rnorm(100),
+    feature2 = rnorm(100)
+  )
+
+  processed_data <- preprocess_data(data)
+
+  # Train a simple model and ensure it runs without errors
+  model <- train_model(processed_data$train, "svm")
+  expect_s3_class(model, "train")
+
+  # Evaluate the model to ensure it returns correct metric names
+  metrics <- evaluate_model(model, processed_data$test)
+  expect_named(metrics, c("RMSE", "Rsquared", "MAE"))
 })

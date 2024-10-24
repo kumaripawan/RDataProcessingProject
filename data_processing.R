@@ -6,15 +6,18 @@ library(shiny)
 
 # Preprocess data function
 preprocess_data <- function(data) {
-  data <- na.omit(data)
+  data <- na.omit(data)  # Remove rows with missing values
   data <- data %>%
-    mutate_if(is.numeric, scale) # Scaling numeric features
-  trainIndex <- createDataPartition(data$target, p = 0.8, 
-                                    list = FALSE, 
+    mutate_if(is.numeric, scale)  # Scale numeric features
+
+  # Partition data into training and testing sets
+  trainIndex <- createDataPartition(data$target, p = 0.8,
+                                    list = FALSE,
                                     times = 1)
   trainData <- data[trainIndex, ]
   testData  <- data[-trainIndex, ]
-  list(train = trainData, test = testData)
+
+  return(list(train = trainData, test = testData))
 }
 
 # Train model function
@@ -42,6 +45,7 @@ plot_performance <- function(metrics) {
 }
 
 # Example usage
+# Uncomment below for example use, or comment it out for test usage.
 # data <- read.csv("data.csv")
 # processed_data <- preprocess_data(data)
 # model <- train_model(processed_data$train, "linear_regression")
@@ -49,8 +53,9 @@ plot_performance <- function(metrics) {
 # print(metrics)
 # plot_performance(metrics)
 
-
-library(covr)
-coverage <- package_coverage()
-report(coverage)
-
+# Coverage calculation (Optional: Only works if you're working in an R package context)
+if (requireNamespace("covr", quietly = TRUE)) {
+  library(covr)
+  coverage <- package_coverage()
+  report(coverage)
+}
