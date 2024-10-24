@@ -39,7 +39,7 @@ jobs:
       - name: Install R dependencies
         run: |
           Rscript -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
-          Rscript -e 'remotes::install_cran(c("caret", "e1071", "tidyverse", "testthat", "shiny"), repos="https://cloud.r-project.org")'
+          Rscript -e 'remotes::install_cran(c("caret", "e1071", "tidyverse", "testthat", "shiny" , "kernlab"), repos="https://cloud.r-project.org")'
 
       # Run tests
       - name: Run tests
