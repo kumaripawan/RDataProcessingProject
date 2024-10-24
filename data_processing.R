@@ -8,8 +8,8 @@ library(shiny)
 preprocess_data <- function(data) {
   data <- na.omit(data)
   data <- data %>%
-    mutate_if(is.numeric, scale)
-  trainIndex <- createDataPartition(data$target, p = .8, 
+    mutate_if(is.numeric, scale) # Scaling numeric features
+  trainIndex <- createDataPartition(data$target, p = 0.8, 
                                     list = FALSE, 
                                     times = 1)
   trainData <- data[trainIndex, ]
@@ -40,3 +40,11 @@ evaluate_model <- function(model, test_data) {
 plot_performance <- function(metrics) {
   barplot(metrics, main = "Model Performance Metrics", beside = TRUE)
 }
+
+# Example usage
+# data <- read.csv("data.csv")
+# processed_data <- preprocess_data(data)
+# model <- train_model(processed_data$train, "linear_regression")
+# metrics <- evaluate_model(model, processed_data$test)
+# print(metrics)
+# plot_performance(metrics)
